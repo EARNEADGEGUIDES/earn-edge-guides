@@ -1,0 +1,534 @@
+<style>
+  :root{
+    --paper:#FAF7F1;
+    --paper2:#F3EEE3;
+    --ink:#14161F;
+    --ink2:#2A2D3E;
+    --marigold:#D9A441;
+    --marigold-deep:#B9832C;
+    --teal:#1F6F63;
+    --rose:#C1503A;
+    --line: rgba(20,22,31,0.10);
+    --card:#FFFFFF;
+    --shadow-sm: 0 2px 8px rgba(20,22,31,0.06);
+    --shadow-md: 0 10px 30px rgba(20,22,31,0.10);
+    --shadow-lg: 0 20px 50px rgba(20,22,31,0.16);
+  }
+  *{box-sizing:border-box;}
+  .dukaan-root{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height:100%;
+    letter-spacing: -0.006em;
+  }
+  .dukaan-root h1, .dukaan-root h2, .dukaan-root h3{
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(250,247,241,0.92);
+    backdrop-filter: blur(8px);
+    position: sticky; top:0; z-index: 20;
+  }
+  .brand{ display:flex; align-items:center; gap:11px; }
+  .brand-mark{
+    width:38px; height:38px; border-radius:10px; background: linear-gradient(155deg, var(--ink) 0%, var(--ink2) 100%);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--marigold); font-family: Georgia, serif; font-weight:700; font-size:19px; flex-shrink:0;
+    box-shadow: var(--shadow-sm);
+  }
+  .brand-name{ font-size: 19px; font-weight: 700; }
+  .top-actions{ display:flex; gap:8px; align-items:center; }
+  .pill-btn{ border:1px solid var(--line); background:#fff; padding:8px 16px; border-radius:999px; font-size:12.5px; font-weight:700; cursor:pointer; color: var(--ink); transition: all .15s ease; }
+  .pill-btn:hover{ border-color: var(--ink); }
+  .pill-btn.on{ background: var(--ink); color:#fff; border-color: var(--ink); }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 36px 28px 80px; }
+  .wrap-narrow{ max-width: 420px; margin: 60px auto; padding: 0 20px; }
+
+  .hero{ margin-bottom: 34px; }
+  .hero h1{ font-size: 38px; line-height:1.12; }
+  .hero p{ color:#5a5a6b; margin-top:10px; max-width: 500px; font-size:14.5px; line-height:1.6; }
+  .eyebrow{ font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color: var(--rose); font-weight:700; margin-bottom:10px; }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap:22px; }
+  .card{ background: var(--card); border:1px solid var(--line); border-radius: 16px; overflow:hidden; display:flex; flex-direction:column; transition: transform .18s ease, box-shadow .18s ease; box-shadow: var(--shadow-sm); }
+  .card:hover{ transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .card-cover{ height: 150px; display:flex; align-items:center; justify-content:center; font-size:46px; overflow:hidden; position:relative; }
+  .card-cover img{ width:100%; height:100%; object-fit:cover; }
+  .card-body{ padding: 18px; display:flex; flex-direction:column; gap:9px; flex:1; }
+  .card-type{ font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color: var(--teal); font-weight:700; }
+  .card-title{ font-size:16.5px; font-weight:700; font-family: Georgia, serif; line-height:1.3; }
+  .card-desc{ font-size:12.5px; color:#6b6b7a; line-height:1.55; flex:1; }
+  .price-row{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .price-now{ font-family:'Courier New', monospace; font-weight:700; font-size:18px; color: var(--ink); }
+  .price-old{ font-family:'Courier New', monospace; font-size:12px; color:#a0a0ad; text-decoration:line-through; }
+  .offer-badge{ font-size:10px; background: var(--rose); color:#fff; padding:3px 8px; border-radius:6px; font-weight:700; }
+  .btn{ border:none; border-radius:10px; padding:12px 16px; font-size:13.5px; font-weight:700; cursor:pointer; transition: all .15s ease; }
+  .btn-primary{ background: var(--ink); color:#fff; box-shadow: var(--shadow-sm); }
+  .btn-primary:hover{ background: var(--ink2); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .btn-outline{ background:transparent; border:1px solid var(--line); color: var(--ink); }
+  .btn-outline:hover{ border-color: var(--ink); }
+  .btn-teal{ background: linear-gradient(155deg, var(--teal) 0%, #175650 100%); color:#fff; box-shadow: var(--shadow-sm); }
+  .btn-teal:hover{ transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .btn-block{ width:100%; }
+  .btn-danger{ background: transparent; color: var(--rose); border:1px solid var(--rose); }
+  .btn-ghost{ background:transparent; border:none; color:#8b8b99; text-decoration:underline; cursor:pointer; font-size:12px; padding:0; }
+  .empty{ border:1px dashed var(--line); border-radius:14px; padding: 40px; text-align:center; color:#8b8b99; font-size:13px; }
+
+  .admin-grid{ display:grid; grid-template-columns: 340px 1fr; gap: 24px; align-items:flex-start; }
+  @media (max-width: 800px){ .admin-grid{ grid-template-columns: 1fr; } }
+  .panel{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:20px; }
+  .panel h3{ font-size:15px; margin-bottom:14px; }
+  .field{ margin-bottom:12px; }
+  .field label{ display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:#6b6b7a; margin-bottom:5px; }
+  .field input, .field textarea, .field select{ width:100%; border:1px solid var(--line); border-radius:8px; padding:9px 11px; font-size:13px; font-family: inherit; background:#FDFCFA; }
+  .field textarea{ resize:vertical; min-height:60px; }
+  .field input[type=file]{ padding:7px; }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .prod-list-item{ display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--line); border-radius:10px; margin-bottom:10px; }
+  .prod-list-item .emoji{ font-size:26px; width:40px; text-align:center; }
+  .prod-list-item .info{ flex:1; min-width:0; }
+  .prod-list-item .info .t{ font-weight:700; font-size:13.5px; }
+  .prod-list-item .info .p{ font-family:'Courier New',monospace; font-size:12px; color:#6b6b7a; }
+  .prod-list-item .info .f{ font-size:11px; color: var(--teal); font-weight:600; }
+  .icon-btn{ border:1px solid var(--line); background:#fff; border-radius:7px; width:30px; height:30px; cursor:pointer; font-size:14px; flex-shrink:0; }
+  .img-preview{ width:70px; height:70px; object-fit:cover; border-radius:8px; margin-top:8px; border:1px solid var(--line); }
+  .note{ font-size:11.5px; color:#8b8b99; background:#F5F1E8; border-radius:8px; padding:10px 12px; line-height:1.5; }
+  .note b{ color: var(--ink); }
+
+  .auth-card{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:34px; box-shadow: var(--shadow-md); }
+  .auth-card h2{ font-size:23px; margin-bottom:6px; }
+  .auth-card .sub{ font-size:13px; color:#6b6b7a; margin-bottom:24px; }
+  .back-link{ display:inline-block; margin-bottom:16px; font-size:12.5px; color:#6b6b7a; cursor:pointer; text-decoration:underline; }
+
+  .landing{ text-align:center; padding: 80px 20px; background: radial-gradient(ellipse 900px 500px at 50% -10%, rgba(217,164,65,0.14), transparent), var(--paper); }
+  .landing-mark{ width:64px; height:64px; border-radius:16px; background: linear-gradient(155deg, var(--ink) 0%, var(--ink2) 100%); display:flex; align-items:center; justify-content:center; color: var(--marigold); font-family: Georgia, serif; font-weight:700; font-size:30px; margin: 0 auto 18px; box-shadow: var(--shadow-md); }
+  .landing h1{ font-size:42px; margin-bottom:12px; }
+  .landing p{ color:#5a5a6b; font-size:15px; margin-bottom:40px; }
+  .landing-choices{ display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
+  .choice-card{ width:240px; background:#fff; border:1px solid var(--line); border-radius:18px; padding:28px; cursor:pointer; text-align:left; transition: transform .18s ease, box-shadow .18s ease; box-shadow: var(--shadow-sm); }
+  .choice-card:hover{ transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+  .choice-card .ic{ font-size:32px; margin-bottom:14px; }
+  .choice-card h3{ font-size:17px; margin-bottom:6px; }
+  .choice-card p{ font-size:12.5px; color:#6b6b7a; margin:0; line-height:1.5; }
+
+  .price-box{ border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; }
+  .price-box .amt{ font-family:'Courier New',monospace; font-weight:700; font-size:18px; }
+  .upi-row{ display:flex; gap:6px; align-items:center; justify-content:center; margin-top:12px; flex-wrap:wrap; }
+  .upi-chip{ font-size:10px; border:1px solid var(--line); border-radius:999px; padding:3px 9px; color:#6b6b7a; font-weight:600; }
+
+  .receipt{ background: #fff; border:1px dashed var(--ink); border-radius:2px; padding:22px; font-family:'Courier New', monospace; font-size:12.5px; }
+  .receipt .rline{ display:flex; justify-content:space-between; margin-bottom:6px; gap:10px; }
+  .receipt hr{ border:none; border-top:1px dashed var(--line); margin:10px 0; }
+  .stamp{ color: var(--teal); font-weight:700; text-align:center; border:2px solid var(--teal); display:inline-block; padding:4px 10px; transform: rotate(-3deg); border-radius:4px; }
+
+  .toast{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background: var(--ink); color:#fff; padding:10px 18px; border-radius:999px; font-size:13px; z-index:200; box-shadow:0 8px 20px rgba(0,0,0,0.2); max-width:90%; text-align:center; }
+</style>
+
+<div class="dukaan-root" id="dukaanRoot"></div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<script>
+(function(){
+  const state = {
+    siteName: "Earn Edge Guides",
+    page: "landing", // landing | store | customer-login | pay | done | admin-login | admin
+    settings: { razorpayKey: "rzp_test_1DP5mmOlF5G5ag", adminPassword: "admin123", emailjsServiceId: "", emailjsTemplateId: "", emailjsPublicKey: "" },
+    products: [
+      { id: "p1", type:"Ebook", emoji:"📘", color:"#EFE3CF", image:"", fileName:"", fileUrl:"", driveLink:"", title:"Instagram Growth ka Chhota Guide", desc:"50 pages ka practical guide — bina paise kharch kiye followers badhane ke tarike.", price: 199, oldPrice: 499 },
+      { id: "p2", type:"Course", emoji:"🎓", color:"#DCEEE9", image:"", fileName:"", fileUrl:"", driveLink:"", title:"Canva se Thumbnail Design Course", desc:"12 video lessons — thumbnail, poster aur reels cover design seekhein.", price: 999, oldPrice: 1499 },
+      { id: "p3", type:"Ebook", emoji:"📗", color:"#F2DCD5", image:"", fileName:"", fileUrl:"", driveLink:"", title:"Freelancing Shuru Kaise Karein", desc:"Client dhundhne se lekar payment lene tak — poora roadmap.", price: 149, oldPrice: null }
+    ],
+    editingId: null,
+    buyingProduct: null,
+    buyer: { email:"", phone:"" },
+    lastOrder: null,
+    adminPassInput: ""
+  };
+
+  function el(tag, attrs, children){
+    const e = document.createElement(tag);
+    if(attrs) for(const k in attrs){
+      if(k === "class") e.className = attrs[k];
+      else if(k === "html") e.innerHTML = attrs[k];
+      else if(k.startsWith("on")) e.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    }
+    (children||[]).forEach(c => { if(c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function money(n){ return "₹" + Number(n).toLocaleString("en-IN"); }
+  function toast(msg){
+    const t = el("div", {class:"toast"}, [msg]);
+    document.getElementById("dukaanRoot").appendChild(t);
+    setTimeout(()=>t.remove(), 2400);
+  }
+
+  function render(){
+    const root = document.getElementById("dukaanRoot");
+    root.innerHTML = "";
+    const showTopbar = state.page !== "landing";
+    if(showTopbar) root.appendChild(renderTopbar());
+
+    let body;
+    switch(state.page){
+      case "landing": body = renderLanding(); break;
+      case "store": body = renderStore(); break;
+      case "customer-login": body = renderCustomerLogin(); break;
+      case "pay": body = renderPay(); break;
+      case "done": body = renderDone(); break;
+      case "admin-login": body = renderAdminLogin(); break;
+      case "admin": body = renderAdmin(); break;
+      default: body = renderLanding();
+    }
+    root.appendChild(body);
+  }
+
+  function renderTopbar(){
+    const top = el("div", {class:"topbar"});
+    const brand = el("div", {class:"brand"});
+    brand.appendChild(el("div", {class:"brand-mark"}, ["₹"]));
+    brand.appendChild(el("div", {class:"brand-name"}, [state.siteName]));
+    top.appendChild(brand);
+    const actions = el("div", {class:"top-actions"});
+    actions.appendChild(el("button", {class:"pill-btn" + (state.page==="landing"?" on":""), onclick:()=>{state.page="landing"; render();}}, ["🏠 Home"]));
+    top.appendChild(actions);
+    return top;
+  }
+
+  function renderLanding(){
+    const c = el("div", {class:"landing"});
+    c.appendChild(el("div", {class:"landing-mark"}, ["₹"]));
+    c.appendChild(el("div", {class:"eyebrow"}, ["Digital Products, Made Simple"]));
+    const h1 = el("h1", {}, [state.siteName]);
+    c.appendChild(h1);
+    c.appendChild(el("p", {}, ["Ebooks aur courses jo turant download ho jaayein — aap kaun hain, ye chunein"]));
+    const choices = el("div", {class:"landing-choices"});
+    const custCard = el("div", {class:"choice-card", onclick:()=>{state.page="store"; render();}});
+    custCard.appendChild(el("div", {class:"ic"}, ["🛍️"]));
+    custCard.appendChild(el("h3", {}, ["Customer"]));
+    custCard.appendChild(el("p", {}, ["Ebook/course dekhein aur kharidein"]));
+    choices.appendChild(custCard);
+    const adminCard = el("div", {class:"choice-card", onclick:()=>{state.page="admin-login"; render();}});
+    adminCard.appendChild(el("div", {class:"ic"}, ["🔐"]));
+    adminCard.appendChild(el("h3", {}, ["Admin"]));
+    adminCard.appendChild(el("p", {}, ["Product, price aur offer manage karein"]));
+    choices.appendChild(adminCard);
+    c.appendChild(choices);
+    c.appendChild(el("div", {style:"margin-top:50px; font-size:11.5px; color:#9a9aa8; letter-spacing:0.04em;"}, ["© " + new Date().getFullYear() + " " + state.siteName + " — Powered by Razorpay"]));
+    return c;
+  }
+
+  function renderStore(){
+    const wrap = el("div", {class:"wrap"});
+    const hero = el("div", {class:"hero"});
+    hero.appendChild(el("div", {class:"eyebrow"}, ["Curated Learning Resources"]));
+    hero.appendChild(el("h1", {}, [state.siteName]));
+    hero.appendChild(el("p", {}, ["Practical ebooks aur courses jo aapko naye skills seekhne aur kamaana shuru karne mein madad karein. Payment ke turant baad file seedhe aapke email par."]));
+    wrap.appendChild(hero);
+
+    if(state.products.length === 0){
+      wrap.appendChild(el("div", {class:"empty"}, ["Abhi koi product nahi hai."]));
+      return wrap;
+    }
+    const grid = el("div", {class:"grid"});
+    state.products.forEach(p => {
+      const card = el("div", {class:"card"});
+      const cover = el("div", {class:"card-cover", style:"background:"+p.color});
+      if(p.image) cover.appendChild(el("img", {src:p.image, alt:p.title}));
+      else cover.appendChild(document.createTextNode(p.emoji));
+      card.appendChild(cover);
+      const body = el("div", {class:"card-body"});
+      body.appendChild(el("div", {class:"card-type"}, [p.type]));
+      body.appendChild(el("div", {class:"card-title"}, [p.title]));
+      body.appendChild(el("div", {class:"card-desc"}, [p.desc]));
+      const priceRow = el("div", {class:"price-row"});
+      priceRow.appendChild(el("div", {class:"price-now"}, [money(p.price)]));
+      if(p.oldPrice) priceRow.appendChild(el("div", {class:"price-old"}, [money(p.oldPrice)]));
+      if(p.oldPrice) priceRow.appendChild(el("div", {class:"offer-badge"}, [Math.round((1-p.price/p.oldPrice)*100)+"% OFF"]));
+      body.appendChild(priceRow);
+      body.appendChild(el("button", {class:"btn btn-primary btn-block", onclick:()=>{ state.buyingProduct = p; state.page = "customer-login"; render(); }}, ["Buy Now"]));
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  function renderCustomerLogin(){
+    const wrap = el("div", {class:"wrap-narrow"});
+    wrap.appendChild(el("div", {class:"back-link", onclick:()=>{state.page="store"; render();}}, ["← Store par wapas jaayein"]));
+    const card = el("div", {class:"auth-card"});
+    card.appendChild(el("h2", {}, ["Customer Login"]));
+    card.appendChild(el("div", {class:"sub"}, ["Ebook/course isi email par bheja jaayega — sahi email aur number dalein."]));
+    const emailF = fieldInput("Email Address", state.buyer.email, v=>state.buyer.email=v, "email");
+    const phoneF = fieldInput("Mobile Number", state.buyer.phone, v=>state.buyer.phone=v, "tel");
+    card.appendChild(emailF);
+    card.appendChild(phoneF);
+    card.appendChild(el("button", {class:"btn btn-primary btn-block", onclick:()=>{
+      if(!state.buyer.email || !state.buyer.phone){ toast("Email aur number dono zaroori hain"); return; }
+      state.page = "pay"; render();
+    }}, ["Continue to Payment →"]));
+    wrap.appendChild(card);
+    return wrap;
+  }
+
+  function renderPay(){
+    const p = state.buyingProduct;
+    const wrap = el("div", {class:"wrap-narrow"});
+    wrap.appendChild(el("div", {class:"back-link", onclick:()=>{state.page="customer-login"; render();}}, ["← Peeche jaayein"]));
+    const card = el("div", {class:"auth-card"});
+    card.appendChild(el("h2", {}, ["Payment Karein"]));
+    card.appendChild(el("div", {class:"sub"}, [p.title]));
+    const box = el("div", {class:"price-box"});
+    box.appendChild(el("div", {}, ["Total Amount"]));
+    box.appendChild(el("div", {class:"amt"}, [money(p.price)]));
+    card.appendChild(box);
+    card.appendChild(el("button", {class:"btn btn-teal btn-block", onclick:openRazorpayCheckout}, ["🔒 Pay " + money(p.price) + " with Razorpay"]));
+    const upiRow = el("div", {class:"upi-row"});
+    ["UPI","GPay","PhonePe","Paytm","Cards","Netbanking"].forEach(m=>upiRow.appendChild(el("div",{class:"upi-chip"},[m])));
+    card.appendChild(upiRow);
+    card.appendChild(el("div", {class:"note", style:"margin-top:14px;"}, [
+      "Ye asli Razorpay checkout hai (test mode ke key ke saath). Apna khud ka Razorpay Key ID Admin → Site Settings mein daalne ke baad ye real payments lega."
+    ]));
+    wrap.appendChild(card);
+    return wrap;
+  }
+
+  function openRazorpayCheckout(){
+    const p = state.buyingProduct;
+    if(typeof Razorpay === "undefined"){
+      toast("Razorpay load nahi hua — internet check karein aur dobara try karein");
+      return;
+    }
+    const options = {
+      key: state.settings.razorpayKey || "rzp_test_1DP5mmOlF5G5ag",
+      amount: Math.round(p.price * 100),
+      currency: "INR",
+      name: state.siteName,
+      description: p.title,
+      prefill: { email: state.buyer.email, contact: state.buyer.phone },
+      theme: { color: "#1B1F3B" },
+      handler: function(response){
+        state.lastOrder = { product: p, buyer: {...state.buyer}, id: (response && response.razorpay_payment_id) ? response.razorpay_payment_id : ("ORD"+Date.now().toString().slice(-6)) };
+        sendDeliveryEmail(p, state.buyer);
+        state.page = "done"; render();
+      },
+      modal: { ondismiss: function(){ toast("Payment cancel kar diya gaya"); } }
+    };
+    const rzp = new Razorpay(options);
+    rzp.on("payment.failed", function(){ toast("Payment fail ho gaya, dobara try karein"); });
+    rzp.open();
+  }
+
+  function sendDeliveryEmail(product, buyer){
+    const s = state.settings;
+    if(!s.emailjsServiceId || !s.emailjsTemplateId || !s.emailjsPublicKey){
+      return; // EmailJS abhi set up nahi hai — sirf receipt dikhega
+    }
+    if(typeof emailjs === "undefined") return;
+    try{
+      emailjs.send(s.emailjsServiceId, s.emailjsTemplateId, {
+        to_email: buyer.email,
+        product_name: product.title,
+        file_link: product.driveLink || "(link admin ne abhi nahi daala)",
+        site_name: state.siteName
+      }, s.emailjsPublicKey);
+    }catch(err){ /* silently ignore in demo */ }
+  }
+
+  function renderDone(){
+    const o = state.lastOrder;
+    const wrap = el("div", {class:"wrap-narrow"});
+    const card = el("div", {class:"auth-card"});
+    card.appendChild(el("h2", {}, ["Payment Safal! 🎉"]));
+    card.appendChild(el("div", {class:"sub"}, ["Order confirm ho gaya"]));
+    const receipt = el("div", {class:"receipt"});
+    receipt.appendChild(el("div", {class:"rline"}, [el("span",{},["Order ID"]), el("span",{},[o.id])]));
+    receipt.appendChild(el("div", {class:"rline"}, [el("span",{},["Product"]), el("span",{},[o.product.title])]));
+    receipt.appendChild(el("div", {class:"rline"}, [el("span",{},["Amount"]), el("span",{},[money(o.product.price)])]));
+    receipt.appendChild(el("hr"));
+    receipt.appendChild(el("div", {class:"rline"}, [el("span",{},["Sent to"]), el("span",{},[o.buyer.email])]));
+    receipt.appendChild(el("div", {class:"rline"}, [el("span",{},["Mobile"]), el("span",{},[o.buyer.phone])]));
+    if(o.product.driveLink) receipt.appendChild(el("div", {class:"rline"}, [el("span",{},["File Link"]), el("span",{style:"word-break:break-all; text-align:right;"},[o.product.driveLink])]));
+    receipt.appendChild(el("div", {style:"text-align:center; margin-top:8px;"}, [el("span",{class:"stamp"},["EMAIL BHEJ DIYA GAYA"])]));
+    card.appendChild(receipt);
+    card.appendChild(el("button", {class:"btn btn-outline btn-block", style:"margin-top:16px;", onclick:()=>{ state.page="landing"; state.buyer={email:"",phone:""}; render(); }}, ["Home par jaayein"]));
+    wrap.appendChild(card);
+    return wrap;
+  }
+
+  function renderAdminLogin(){
+    const wrap = el("div", {class:"wrap-narrow"});
+    wrap.appendChild(el("div", {class:"back-link", onclick:()=>{state.page="landing"; render();}}, ["← Home par wapas jaayein"]));
+    const card = el("div", {class:"auth-card"});
+    card.appendChild(el("h2", {}, ["Admin Login"]));
+    card.appendChild(el("div", {class:"sub"}, ["Demo password: admin123"]));
+    const passF = fieldInput("Admin Password", state.adminPassInput, v=>state.adminPassInput=v, "password");
+    card.appendChild(passF);
+    card.appendChild(el("button", {class:"btn btn-primary btn-block", onclick:()=>{
+      if(state.adminPassInput === state.settings.adminPassword){ state.page = "admin"; state.adminPassInput=""; render(); }
+      else toast("Galat password");
+    }}, ["Login"]));
+    wrap.appendChild(card);
+    return wrap;
+  }
+
+  function blankProduct(){
+    return { id: "p"+Date.now(), type:"Ebook", emoji:"📘", color:"#EFE3CF", image:"", fileName:"", fileUrl:"", driveLink:"", title:"", desc:"", price:"", oldPrice:"" };
+  }
+
+  function renderAdmin(){
+    const wrap = el("div", {class:"wrap"});
+
+    const settingsPanel = el("div", {class:"panel"});
+    settingsPanel.appendChild(el("h3", {}, ["Site Settings"]));
+    settingsPanel.appendChild(fieldInput("Website ka Naam", state.siteName, v=>{state.siteName=v;}, "text"));
+    const rzpField = fieldInput("Razorpay Key ID (apna asli key yahan daalein)", state.settings.razorpayKey, v=>state.settings.razorpayKey=v, "text");
+    settingsPanel.appendChild(rzpField);
+    settingsPanel.appendChild(el("div", {class:"note"}, ["Abhi Razorpay ka public ", el("b",{},["test key"]), " laga hai taaki checkout demo mein khul sake. Razorpay Dashboard se apna Key ID lekar yahan paste karein — us par real UPI/card payments aane lagenge."]));
+    settingsPanel.appendChild(el("button", {class:"btn btn-outline", style:"margin-top:10px;", onclick:()=>{ toast("Settings save ho gayi"); render(); }}, ["Save Settings"]));
+    wrap.appendChild(settingsPanel);
+
+    const emailPanel = el("div", {class:"panel"});
+    emailPanel.appendChild(el("h3", {}, ["Auto-Email Settings (EmailJS)"]));
+    emailPanel.appendChild(fieldInput("EmailJS Service ID", state.settings.emailjsServiceId, v=>state.settings.emailjsServiceId=v));
+    emailPanel.appendChild(fieldInput("EmailJS Template ID", state.settings.emailjsTemplateId, v=>state.settings.emailjsTemplateId=v));
+    emailPanel.appendChild(fieldInput("EmailJS Public Key", state.settings.emailjsPublicKey, v=>state.settings.emailjsPublicKey=v));
+    emailPanel.appendChild(el("div", {class:"note"}, ["emailjs.com par ", el("b",{},["free account"]), " banao (200 email/month free), apna Gmail connect karo, ek email template banao jisme {{to_email}}, {{product_name}}, {{file_link}} variables use karo. Wahan se ye teeno IDs milengi — yahan paste karte hi payment success hote hi customer ko email khud-ba-khud chali jaayegi."]));
+    emailPanel.appendChild(el("button", {class:"btn btn-outline", style:"margin-top:10px;", onclick:()=>{ toast("Email settings save ho gayi"); render(); }}, ["Save Email Settings"]));
+    wrap.appendChild(emailPanel);
+
+    const grid = el("div", {class:"admin-grid"});
+    const editing = state.editingId ? state.products.find(p=>p.id===state.editingId) : blankProduct();
+    const formPanel = el("div", {class:"panel"});
+    formPanel.appendChild(el("h3", {}, [state.editingId ? "Product Edit Karein" : "Naya Product Add Karein"]));
+
+    formPanel.appendChild(fieldInput("Product ka Naam", editing.title, v=>editing.title=v));
+    formPanel.appendChild(fieldSelect("Type", editing.type, ["Ebook","Course"], v=>editing.type=v));
+    formPanel.appendChild(fieldTextarea("Chhota Description", editing.desc, v=>editing.desc=v));
+    const row2 = el("div", {class:"row2"});
+    row2.appendChild(fieldInput("Price (₹)", editing.price, v=>editing.price=v, "number"));
+    row2.appendChild(fieldInput("Purani Price / MRP (₹, optional)", editing.oldPrice, v=>editing.oldPrice=v, "number"));
+    formPanel.appendChild(row2);
+
+    const imgField = el("div", {class:"field"});
+    imgField.appendChild(el("label", {}, ["Product Image (apne device se upload karein)"]));
+    const imgInput = el("input", {type:"file", accept:"image/*"});
+    imgInput.addEventListener("change", e=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{ editing.image = reader.result; render(); if(state.editingId===null) state.editingId = "__pending__"; };
+      reader.readAsDataURL(file);
+      if(!state.editingId){ state._draft = editing; }
+    });
+    imgField.appendChild(imgInput);
+    if(editing.image) imgField.appendChild(el("img", {class:"img-preview", src:editing.image}));
+    formPanel.appendChild(imgField);
+
+    const fileField = el("div", {class:"field"});
+    fileField.appendChild(el("label", {}, ["Ebook/Course File — PDF, Word (.doc/.docx), ZIP ya video (apne device se upload karein)"]));
+    const fileInput = el("input", {type:"file", accept:".pdf,.doc,.docx,.epub,.zip,.mp4,.mp3,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+    fileInput.addEventListener("change", e=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      editing.fileName = file.name;
+      editing.fileUrl = URL.createObjectURL(file);
+      render();
+    });
+    fileField.appendChild(fileInput);
+    if(editing.fileName) fileField.appendChild(el("div", {style:"font-size:12px; color:#2F7A6E; margin-top:6px; font-weight:600;"}, ["✓ " + editing.fileName + " select ho gayi"]));
+    fileField.appendChild(el("div", {class:"note", style:"margin-top:8px;"}, ["Ye upload sirf ", el("b",{},["is demo ke andar preview"]), " ke liye hai. Website live karte waqt file ko Google Drive par daalkar uska link neeche box mein daalein — email usi link ke saath jaayegi."]));
+    formPanel.appendChild(fileField);
+
+    const driveField = fieldInput("Ebook ka Download Link (Google Drive shareable link — customer ko email mein isi ka link jaayega)", editing.driveLink, v=>editing.driveLink=v);
+    formPanel.appendChild(driveField);
+
+    const btnRow = el("div", {style:"display:flex; gap:8px; margin-top:10px;"});
+    btnRow.appendChild(el("button", {class:"btn btn-primary", onclick:()=>{
+      if(!editing.title || !editing.price){ toast("Naam aur price zaroor bharein"); return; }
+      editing.price = Number(editing.price);
+      editing.oldPrice = editing.oldPrice ? Number(editing.oldPrice) : null;
+      if(state.editingId && state.editingId !== "__pending__"){
+        const idx = state.products.findIndex(p=>p.id===state.editingId);
+        state.products[idx] = editing;
+      } else {
+        state.products.push(editing);
+      }
+      state.editingId = null;
+      toast("Product save ho gaya");
+      render();
+    }}, [(state.editingId && state.editingId !== "__pending__") ? "Changes Save Karein" : "Product Add Karein"]));
+    if(state.editingId){
+      btnRow.appendChild(el("button", {class:"btn btn-outline", onclick:()=>{ state.editingId=null; render(); }}, ["Cancel"]));
+    }
+    formPanel.appendChild(btnRow);
+    grid.appendChild(formPanel);
+
+    const listPanel = el("div", {class:"panel"});
+    listPanel.appendChild(el("h3", {}, ["Aapke Products (" + state.products.length + ")"]));
+    if(state.products.length === 0){
+      listPanel.appendChild(el("div", {class:"empty"}, ["Koi product nahi hai. Left side se ek add karein."]));
+    }
+    state.products.forEach(p=>{
+      const item = el("div", {class:"prod-list-item"});
+      if(p.image) item.appendChild(el("img", {src:p.image, style:"width:40px;height:40px;border-radius:6px;object-fit:cover;flex-shrink:0;"}));
+      else item.appendChild(el("div", {class:"emoji"}, [p.emoji]));
+      const info = el("div", {class:"info"});
+      info.appendChild(el("div", {class:"t"}, [p.title]));
+      info.appendChild(el("div", {class:"p"}, [p.type + " · " + money(p.price) + (p.oldPrice ? " (MRP "+money(p.oldPrice)+")" : "")]));
+      if(p.fileName) info.appendChild(el("div", {class:"f"}, ["📎 " + p.fileName]));
+      item.appendChild(info);
+      item.appendChild(el("button", {class:"icon-btn", title:"Edit", onclick:()=>{ state.editingId = p.id; render(); }}, ["✏️"]));
+      item.appendChild(el("button", {class:"icon-btn", title:"Remove", onclick:()=>{ state.products = state.products.filter(x=>x.id!==p.id); toast("Product hata diya gaya"); render(); }}, ["🗑️"]));
+      listPanel.appendChild(item);
+    });
+    grid.appendChild(listPanel);
+    wrap.appendChild(grid);
+
+    wrap.appendChild(el("button", {class:"btn btn-ghost", style:"margin-top:6px;", onclick:()=>{ state.page="landing"; render(); }}, ["Admin se logout karein"]));
+    return wrap;
+  }
+
+  function fieldInput(label, value, onChange, type){
+    const f = el("div", {class:"field"});
+    f.appendChild(el("label", {}, [label]));
+    const input = el("input", {type: type||"text", value: value===null?"":value});
+    input.addEventListener("input", e=>onChange(e.target.value));
+    f.appendChild(input);
+    return f;
+  }
+  function fieldTextarea(label, value, onChange){
+    const f = el("div", {class:"field"});
+    f.appendChild(el("label", {}, [label]));
+    const ta = el("textarea", {}, [value||""]);
+    ta.addEventListener("input", e=>onChange(e.target.value));
+    f.appendChild(ta);
+    return f;
+  }
+  function fieldSelect(label, value, options, onChange){
+    const f = el("div", {class:"field"});
+    f.appendChild(el("label", {}, [label]));
+    const sel = el("select", {});
+    options.forEach(o=>{
+      const opt = el("option", {value:o}, [o]);
+      if(o===value) opt.setAttribute("selected","selected");
+      sel.appendChild(opt);
+    });
+    sel.addEventListener("change", e=>onChange(e.target.value));
+    f.appendChild(sel);
+    return f;
+  }
+
+  render();
+})();
+</script>
